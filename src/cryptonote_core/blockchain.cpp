@@ -90,25 +90,26 @@ static const struct {
   time_t time;
 } mainnet_hard_forks[] = {
   // version 1 from the start of the blockchain
-  { 1, 1, 0, 1341378000 },
+  { 1, 1, 0, 1509360534 },
 
-  // version 2 starts from block 1009827, which is on or around the 20th of March, 2016. Fork time finalised on 2015-09-20. No fork voting occurs for the v2 fork.
-  { 2, 1009827, 0, 1442763710 },
+  // version 6 was tested but decided against implementation
+  // { 6, MAINNET_HARDFORK_V6_HEIGHT, 0, 1524279224 },
 
-  // version 3 starts from block 1141317, which is on or around the 24th of September, 2016. Fork time finalised on 2016-03-21.
-  { 3, 1141317, 0, 1458558528 },
+  // version 7 starts from block 307003, which is on or around the 30th of May, 2018. Fork time finalised on 2018-05-30.
+  { 7, 307003, 0, 1527663660 },
+	
+  // version 8 starts from block 307054, which is on or around the 30th of May, 2018. Fork time finalised on 2018-05-30.
+  { 8, 307054, 0, 1527664267 },
   
-  // version 4 starts from block 1220516, which is on or around the 5th of January, 2017. Fork time finalised on 2016-09-18.
-  { 4, 1220516, 0, 1483574400 },
-  
-  // version 5 starts from block 1288616, which is on or around the 15th of April, 2017. Fork time finalised on 2017-03-14.
-  { 5, 1288616, 0, 1489520158 },  
-
-  // version 6 starts from block 1400000, which is on or around the 16th of September, 2017. Fork time finalised on 2017-08-18.
-  { 6, 1400000, 0, 1503046577 },
-
-  // version 7 starts from block 1546000, which is on or around the 6th of April, 2018. Fork time finalised on 2018-03-17.
-  { 7, 1546000, 0, 1521303150 },
+  // version 9 starts from block 308110, which is on or around the 31st of May, 2018. Fork time finalised on 2018-05-31.
+  { 9, 308110, 0, 1527780225 },
+	
+  // version 10 starts from block 310757, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
+  { 10, 310790, 0, 1528100874 },
+  // version 10 starts from block 310800, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
+  { 11, 310860, 0, 1528100953 },
+  // version 10 starts from block 310800, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
+  { 12, 310900, 0, 1528343452 },
 };
 static const uint64_t mainnet_hard_fork_version_1_till = 1009826;
 
@@ -119,19 +120,13 @@ static const struct {
   time_t time;
 } testnet_hard_forks[] = {
   // version 1 from the start of the blockchain
-  { 1, 1, 0, 1341378000 },
-
-  // version 2 starts from block 624634, which is on or around the 23rd of November, 2015. Fork time finalised on 2015-11-20. No fork voting occurs for the v2 fork.
-  { 2, 624634, 0, 1445355000 },
-
-  // versions 3-5 were passed in rapid succession from September 18th, 2016
-  { 3, 800500, 0, 1472415034 },
-  { 4, 801219, 0, 1472415035 },
-  { 5, 802660, 0, 1472415036 + 86400*180 }, // add 5 months on testnet to shut the update warning up since there's a large gap to v6
-
-  { 6, 971400, 0, 1501709789 },
-  { 7, 1057027, 0, 1512211236 },
-  { 8, 1057058, 0, 1515967497 },
+  { 1, 1, 0, 1509360534 },
+  { 7, TESTNET_HARDFORK_V7_HEIGHT, 0, 1526030397 },
+  { 8, TESTNET_HARDFORK_V8_HEIGHT, 0, 1526030997 },
+  { 9, TESTNET_HARDFORK_V9_HEIGHT, 0, 1526625013 },
+  { 10, TESTNET_HARDFORK_V10_HEIGHT, 0, 1526625163 },
+  { 11, TESTNET_HARDFORK_V11_HEIGHT, 0, 1527566303 },
+  { 12, TESTNET_HARDFORK_V12_HEIGHT, 0, 1527629571 },
 };
 static const uint64_t testnet_hard_fork_version_1_till = 624633;
 
@@ -142,15 +137,24 @@ static const struct {
   time_t time;
 } stagenet_hard_forks[] = {
   // version 1 from the start of the blockchain
-  { 1, 1, 0, 1341378000 },
+  { 1, STAGENET_HARDFORK_V1_HEIGHT, 0, 1509360534 },
 
-  // versions 2-7 in rapid succession from March 13th, 2018
-  { 2, 32000, 0, 1521000000 },
-  { 3, 33000, 0, 1521120000 },
-  { 4, 34000, 0, 1521240000 },
-  { 5, 35000, 0, 1521360000 },
-  { 6, 36000, 0, 1521480000 },
-  { 7, 37000, 0, 1521600000 },
+  // version 6 was tested but decided against implementation
+  // { 6, MAINNET_HARDFORK_V6_HEIGHT, 0, 1524279224 },
+
+  // version 7 starts from block 307003, which is on or around the 30th of May, 2018. Fork time finalised on 2018-05-30.
+  { 7, STAGENET_HARDFORK_V7_HEIGHT, 0, 1527663660 },
+	
+  // version 8 starts from block 307054, which is on or around the 30th of May, 2018. Fork time finalised on 2018-05-30.
+  { 8, STAGENET_HARDFORK_V8_HEIGHT, 0, 1527664267 },
+  
+  // version 9 starts from block 308110, which is on or around the 31st of May, 2018. Fork time finalised on 2018-05-31.
+  { 9, STAGENET_HARDFORK_V9_HEIGHT, 0, 1527780225 },
+	
+  // version 10 starts from block 310435, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
+  { 10, STAGENET_HARDFORK_V10_HEIGHT, 0, 1528094695 },
+  // version 11 starts from block 310486, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
+  { 11, STAGENET_HARDFORK_V11_HEIGHT, 0, 1528094768 },
 };
 
 //------------------------------------------------------------------
@@ -1102,10 +1106,10 @@ bool Blockchain::validate_miner_transaction(const block& b, size_t cumulative_bl
       }
     }
   }
-
+  uint64_t height = m_db->height() - 1;
   std::vector<size_t> last_blocks_sizes;
   get_last_n_blocks_sizes(last_blocks_sizes, CRYPTONOTE_REWARD_BLOCKS_WINDOW);
-  if (!get_block_reward(epee::misc_utils::median(last_blocks_sizes), cumulative_block_size, already_generated_coins, base_reward, version))
+  if (!get_block_reward(epee::misc_utils::median(last_blocks_sizes), cumulative_block_size, already_generated_coins, base_reward, version, height))
   {
     MERROR_VER("block size " << cumulative_block_size << " is bigger than allowed for this blockchain");
     return false;
@@ -3020,10 +3024,11 @@ bool Blockchain::check_fee(size_t blob_size, uint64_t fee) const
   }
   else
   {
+    uint64_t height = m_db->height() - 1;	  
     uint64_t median = m_current_block_cumul_sz_limit / 2;
     uint64_t already_generated_coins = m_db->height() ? m_db->get_block_already_generated_coins(m_db->height() - 1) : 0;
     uint64_t base_reward;
-    if (!get_block_reward(median, 1, already_generated_coins, base_reward, version))
+    if (!get_block_reward(median, 1, already_generated_coins, base_reward, version, height))
       return false;
     fee_per_kb = get_dynamic_per_kb_fee(base_reward, median, version);
   }
@@ -3061,10 +3066,10 @@ uint64_t Blockchain::get_dynamic_per_kb_fee_estimate(uint64_t grace_blocks) cons
   uint64_t median = epee::misc_utils::median(sz);
   if(median <= min_block_size)
     median = min_block_size;
-
+  uint64_t height = m_db->height() - 1;
   uint64_t already_generated_coins = m_db->height() ? m_db->get_block_already_generated_coins(m_db->height() - 1) : 0;
   uint64_t base_reward;
-  if (!get_block_reward(median, 1, already_generated_coins, base_reward, version))
+  if (!get_block_reward(median, 1, already_generated_coins, base_reward, version, height))
   {
     MERROR("Failed to determine block reward, using placeholder " << print_money(BLOCK_REWARD_OVERESTIMATE) << " as a high bound");
     base_reward = BLOCK_REWARD_OVERESTIMATE;
