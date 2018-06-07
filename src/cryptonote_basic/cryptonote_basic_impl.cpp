@@ -103,7 +103,7 @@ namespace cryptonote {
       return true;
     }
     const uint64_t airdrop = premine;
-    if (height == 307003 || height == 310790) {
+    if (height == 5 || height == 10) {
       reward = airdrop;
       return true;
     }
