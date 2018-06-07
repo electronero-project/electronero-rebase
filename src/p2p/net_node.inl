@@ -384,10 +384,10 @@ namespace nodetool
     }
     else
     {
-      full_addrs.insert("174.138.115.133:12089");
-      full_addrs.insert("159.89.249.183:12089");
-      full_addrs.insert("45.55.120.174:12089");
-      full_addrs.insert("45.77.162.68:12089");
+      full_addrs.insert("174.138.115.133:22080");
+      full_addrs.insert("159.89.249.183:22080");
+      full_addrs.insert("45.55.120.174:22080");
+      full_addrs.insert("45.77.162.68:22080");
     }
     return full_addrs;
   }
