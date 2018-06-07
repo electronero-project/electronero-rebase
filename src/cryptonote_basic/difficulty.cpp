@@ -343,13 +343,14 @@ difficulty_type next_difficulty_v12(std::vector<std::uint64_t> timestamps, std::
 
     double LWMA(0), sum_inverse_D(0), harmonic_mean_D(0), nextDifficulty(0);
     int64_t solveTime(0);
-    uint64_t difficulty(0), next_difficulty(0);
+    //uint64_t difficulty(0);
+    uint64_t next_difficulty(0);
 
     // Loop through N most recent blocks. N is most recently solved block.
     for (size_t i = 1; i <= N; i++) {
       solveTime = static_cast<int64_t>(timestamps[i]) - static_cast<int64_t>(timestamps[i - 1]);
       solveTime = std::min<int64_t>((T * 6), std::max<int64_t>(solveTime, -FTL));
-      difficulty = cumulative_difficulties[i] - cumulative_difficulties[i - 1];
+      //difficulty = cumulative_difficulties[i] - cumulative_difficulties[i - 1];
       LWMA += (int64_t)(solveTime * i) / k;
     }
 
@@ -357,7 +358,9 @@ difficulty_type next_difficulty_v12(std::vector<std::uint64_t> timestamps, std::
     if (static_cast<int64_t>(boost::math::round(LWMA)) < T / 4)
       LWMA = static_cast<double>(T / 4);
 
-    nextDifficulty = (cumulative_difficulties[N] - cumulative_difficulties[0])/N * T / LWMA * adjust;
+    //nextDifficulty = (cumulative_difficulties[N] - cumulative_difficulties[0])/N * T / LWMA * adjust;
+    nextDifficulty = (((cumulative_difficulties[N] - cumulative_difficulties[0]) / N ) * adjust * T ) / LWMA;
+
 
     // No limits should be employed, but this is correct way to employ a 20% symmetrical limit:
     // nextDifficulty=max(previous_Difficulty*0.8,min(previous_Difficulty/0.8, next_Difficulty));
