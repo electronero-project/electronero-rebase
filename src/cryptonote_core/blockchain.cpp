@@ -121,12 +121,12 @@ static const struct {
 } testnet_hard_forks[] = {
   // version 1 from the start of the blockchain
   { 1, 1, 0, 1509360534 },
-  { 7, TESTNET_HARDFORK_V7_HEIGHT, 0, 1526030397 },
-  { 8, TESTNET_HARDFORK_V8_HEIGHT, 0, 1526030997 },
-  { 9, TESTNET_HARDFORK_V9_HEIGHT, 0, 1526625013 },
-  { 10, TESTNET_HARDFORK_V10_HEIGHT, 0, 1526625163 },
-  { 11, TESTNET_HARDFORK_V11_HEIGHT, 0, 1527566303 },
-  { 12, TESTNET_HARDFORK_V12_HEIGHT, 0, 1527629571 },
+  { 7, 5, 0, 1526030397 },
+  { 8, 10, 0, 1526030997 },
+  { 9, 15, 0, 1526625013 },
+  { 10, 20, 0, 1526625163 },
+  { 11, 30, 0, 1527566303 },
+  { 12, 40, 0, 1527629571 },
 };
 static const uint64_t testnet_hard_fork_version_1_till = 624633;
 
@@ -137,24 +137,24 @@ static const struct {
   time_t time;
 } stagenet_hard_forks[] = {
   // version 1 from the start of the blockchain
-  { 1, STAGENET_HARDFORK_V1_HEIGHT, 0, 1509360534 },
+  { 1, 1, 0, 1509360534 },
 
   // version 6 was tested but decided against implementation
   // { 6, MAINNET_HARDFORK_V6_HEIGHT, 0, 1524279224 },
 
   // version 7 starts from block 307003, which is on or around the 30th of May, 2018. Fork time finalised on 2018-05-30.
-  { 7, STAGENET_HARDFORK_V7_HEIGHT, 0, 1527663660 },
+  { 7, 5, 0, 1527663660 },
 	
   // version 8 starts from block 307054, which is on or around the 30th of May, 2018. Fork time finalised on 2018-05-30.
-  { 8, STAGENET_HARDFORK_V8_HEIGHT, 0, 1527664267 },
+  { 8, 10, 0, 1527664267 },
   
   // version 9 starts from block 308110, which is on or around the 31st of May, 2018. Fork time finalised on 2018-05-31.
-  { 9, STAGENET_HARDFORK_V9_HEIGHT, 0, 1527780225 },
+  { 9, 15, 0, 1527780225 },
 	
   // version 10 starts from block 310435, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
-  { 10, STAGENET_HARDFORK_V10_HEIGHT, 0, 1528094695 },
+  { 10, 20, 0, 1528094695 },
   // version 11 starts from block 310486, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
-  { 11, STAGENET_HARDFORK_V11_HEIGHT, 0, 1528094768 },
+  { 11, 25, 0, 1528094768 },
 };
 
 //------------------------------------------------------------------
