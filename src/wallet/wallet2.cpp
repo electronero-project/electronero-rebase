@@ -110,10 +110,10 @@ using namespace cryptonote;
 
 #define MULTISIG_EXPORT_FILE_MAGIC "Monero multisig export\001"
 
-#define SEGREGATION_FORK_HEIGHT 1546000
+#define SEGREGATION_FORK_HEIGHT 1000000
 #define TESTNET_SEGREGATION_FORK_HEIGHT 1000000
 #define STAGENET_SEGREGATION_FORK_HEIGHT 1000000
-#define SEGREGATION_FORK_VICINITY 1500 /* blocks */
+#define SEGREGATION_FORK_VICINITY 15000 /* blocks */
 
 
 namespace
@@ -123,7 +123,7 @@ namespace
     boost::filesystem::path dir = tools::get_default_data_dir();
     // remove .bitmonero, replace with .shared-ringdb
     dir = dir.remove_filename();
-    dir /= ".shared-ringdb";
+    dir /= ".shared-electronero-ringdb";
     return dir.string();
   }
 }
@@ -5258,6 +5258,7 @@ uint64_t wallet2::get_fee_multiplier(uint32_t priority, int fee_algorithm) const
   static const uint64_t old_multipliers[3] = {1, 2, 3};
   static const uint64_t new_multipliers[3] = {1, 20, 166};
   static const uint64_t newer_multipliers[4] = {1, 4, 20, 166};
+  static const uint64_t etnx_multipliers[4] = {1, 2, 4, 8};
 
   if (fee_algorithm == -1)
     fee_algorithm = get_fee_algorithm();
@@ -5282,6 +5283,7 @@ uint64_t wallet2::get_fee_multiplier(uint32_t priority, int fee_algorithm) const
       case 0: return old_multipliers[priority-1];
       case 1: return new_multipliers[priority-1];
       case 2: return newer_multipliers[priority-1];
+      case 3: return etnx_multipliers[priority-1];
       default: THROW_WALLET_EXCEPTION_IF (true, error::invalid_priority);
     }
   }
@@ -5313,6 +5315,8 @@ uint64_t wallet2::get_per_kb_fee() const
 //----------------------------------------------------------------------------------------------------
 int wallet2::get_fee_algorithm() const
 {
+  if(use_fork_rules(12, 0))
+    return 3;
   // changes at v3 and v5
   if (use_fork_rules(5, 0))
     return 2;
