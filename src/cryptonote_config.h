@@ -85,7 +85,7 @@
 // < v12
 #define DIFFICULTY_WINDOW_V2                            70
 #define DIFFICULTY_BLOCKS_COUNT_V2                      DIFFICULTY_WINDOW_V2
-#define CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V2           DIFFICULTY_TARGET * 2
+#define CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT_V2           DIFFICULTY_TARGET_V1 * 2
 
 // >=v12 for LWMA
 #define DIFFICULTY_WINDOW_V12                           60
