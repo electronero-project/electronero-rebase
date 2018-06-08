@@ -3226,7 +3226,7 @@ uint64_t Blockchain::get_adjusted_time() const
 //TODO: revisit, has changed a bit on upstream
 bool Blockchain::check_block_timestamp(std::vector<uint64_t>& timestamps, const block& b, uint64_t& median_ts) const
 {
-  LOG_PRINT_L3("Blockchain::" << __fuBLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V12nc__);
+  LOG_PRINT_L3("Blockchain::" << BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW_V12);
   median_ts = epee::misc_utils::median(timestamps);
 
 
