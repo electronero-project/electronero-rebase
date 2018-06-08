@@ -72,9 +72,9 @@ namespace {
     std::string get_default_ringdb_path()
     {
       boost::filesystem::path dir = tools::get_default_data_dir();
-      // remove .bitmonero, replace with .shared-ringdb
+      // remove .shared-ringdb, replace with .shared-electronero-ringdb
       dir = dir.remove_filename();
-      dir /= ".shared-ringdb";
+      dir /= CRYPTONOTE_RINGDB_DIR; // move ringdb to the config
       return dir.string();
     }
 }
