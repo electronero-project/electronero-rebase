@@ -1116,7 +1116,6 @@ namespace cryptonote
       {
         // If we're getting lower coinbase tx,
         // stop including more tx
-	uint64_t height = m_db->height() - 1;
         uint64_t block_reward;
         if(!get_block_reward(median_size, total_size + meta.blob_size, already_generated_coins, block_reward, version, height))
         {
