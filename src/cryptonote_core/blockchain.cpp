@@ -355,19 +355,14 @@ bool Blockchain::init(BlockchainDB* db, const network_type nettype, bool offline
   m_offline = offline;
   if (m_hardfork == nullptr)
   {
-    if (m_nettype ==  FAKECHAIN || m_nettype == STAGENET)
+    if (m_nettype == STAGENET)
       m_hardfork = new HardFork(*db, 1, 0);
     else if (m_nettype == TESTNET)
       m_hardfork = new HardFork(*db, 1, testnet_hard_fork_version_1_till);
     else
       m_hardfork = new HardFork(*db, 1, mainnet_hard_fork_version_1_till);
   }
-  if (m_nettype == FAKECHAIN)
-  {
-    for (size_t n = 0; test_options->hard_forks[n].first; ++n)
-      m_hardfork->add_fork(test_options->hard_forks[n].first, test_options->hard_forks[n].second, 0, n + 1);
-  }
-  else if (m_nettype == TESTNET)
+  if (m_nettype == TESTNET)
   {
     for (size_t n = 0; n < sizeof(testnet_hard_forks) / sizeof(testnet_hard_forks[0]); ++n)
       m_hardfork->add_fork(testnet_hard_forks[n].version, testnet_hard_forks[n].height, testnet_hard_forks[n].threshold, testnet_hard_forks[n].time);
@@ -1095,7 +1090,7 @@ difficulty_type Blockchain::get_next_difficulty_for_alternative_chain(const std:
     return next_difficulty(timestamps, cumulative_difficulties, target);
   } else if (version > 2 && version < 9) {
     return next_difficulty_v2(timestamps, cumulative_difficulties, target);
-  } else if (version < 12) {
+  } else if (version > 9 && version < 12) {
     return next_difficulty_v3(timestamps, cumulative_difficulties, target);
   }else{
     return next_difficulty_v12(timestamps, cumulative_difficulties, target);
@@ -1161,7 +1156,7 @@ bool Blockchain::validate_miner_transaction(const block& b, size_t cumulative_bl
     MERROR_VER("block size " << cumulative_block_size << " is bigger than allowed for this blockchain");
     return false;
   }
-  if(base_reward + fee < money_in_use)
+  if(base_reward + fee < money_in_use && already_generated_coins > 0)
   {
     MERROR_VER("coinbase transaction spend too much money (" << print_money(money_in_use) << "). Block reward is " << print_money(base_reward + fee) << "(" << print_money(base_reward) << "+" << print_money(fee) << ")");
     return false;
@@ -1169,7 +1164,7 @@ bool Blockchain::validate_miner_transaction(const block& b, size_t cumulative_bl
   // From hard fork 2, we allow a miner to claim less block reward than is allowed, in case a miner wants less dust
   if (m_hardfork->get_current_version() < 2)
   {
-    if(base_reward + fee != money_in_use)
+    if(base_reward + fee != money_in_use && already_generated_coins > 0)
     {
       MDEBUG("coinbase transaction doesn't use full amount of block reward:  spent: " << money_in_use << ",  block reward " << base_reward + fee << "(" << base_reward << "+" << fee << ")");
       return false;
@@ -2706,7 +2701,7 @@ bool Blockchain::check_tx_inputs(transaction& tx, tx_verification_context &tvc, 
     }
 
     // min/max tx version based on HF, and we accept v1 txes if having a non mixable
-    const size_t max_tx_version = (hf_version <= 3) ? 1 : 2;
+    const size_t max_tx_version = CURRENT_TRANSACTION_VERSION;
     if (tx.version > max_tx_version)
     {
       MERROR_VER("transaction version " << (unsigned)tx.version << " is higher than max accepted version " << max_tx_version);
@@ -3038,7 +3033,7 @@ static uint64_t get_fee_quantization_mask()
 uint64_t Blockchain::get_dynamic_per_kb_fee(uint64_t block_reward, size_t median_block_size, uint8_t version)
 {
   const uint64_t min_block_size = get_min_block_size(version);
-  const uint64_t fee_per_kb_base = version >= 100 ? DYNAMIC_FEE_PER_KB_BASE_FEE_V5 : DYNAMIC_FEE_PER_KB_BASE_FEE;
+  const uint64_t fee_per_kb_base = version >= HF_VERSION_DYNAMIC_FEE ? DYNAMIC_FEE_PER_KB_BASE_FEE_V5 : DYNAMIC_FEE_PER_KB_BASE_FEE;
 
   if (median_block_size < min_block_size)
     median_block_size = min_block_size;
