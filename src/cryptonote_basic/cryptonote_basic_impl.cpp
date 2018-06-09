@@ -95,7 +95,7 @@ namespace cryptonote {
     const int emission_speed_factor_v2 = EMISSION_SPEED_FACTOR_PER_MINUTE + (target_minutes-1);
     const int emission_speed_factor_v3 = EMISSION_SPEED_FACTOR_PER_MINUTE + (target_minutes-2);
     uint64_t emission_speed = version < 7 ? emission_speed_factor : version >= 10 ? emission_speed_factor_v3 : emission_speed_factor_v2;
-    uint64_t base_reward = (TOKEN_SUPPLY - already_generated_coins) >> emission_speed_factor;
+    uint64_t base_reward = (TOKEN_SUPPLY - already_generated_coins) >> emission_speed;
 
     const uint64_t premine = 1260000000000U;
     if (height == 1 && already_generated_coins < premine) {
@@ -108,9 +108,9 @@ namespace cryptonote {
       return true;
     }
 
-   const uint64_t FINITE_SUBSIDY = 100U;
+   const uint64_t FINITE_SUBSIDY = 1000000U;
    if (base_reward < FINITE_SUBSIDY){
-     if (MONEY_SUPPLY > already_generated_coins){
+     if (TOKEN_SUPPLY > already_generated_coins){
        base_reward = FINAL_SUBSIDY_PER_MINUTE;
      }
      else{
