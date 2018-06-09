@@ -109,7 +109,7 @@ static const struct {
   // version 10 starts from block 310800, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
   { 11, 310860, 0, 1528100953 },
   // version 10 starts from block 310800, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
-  { 12, 310900, 0, 1528343452 },
+  //{ 12, 310900, 0, 1528343452 },
 };
 static const uint64_t mainnet_hard_fork_version_1_till = 1009826;
 
