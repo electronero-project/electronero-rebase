@@ -2088,7 +2088,7 @@ bool core_rpc_server::on_get_output_distribution(const COMMAND_RPC_GET_OUTPUT_DI
     {
       for (uint64_t amount: req.amounts)
       {
-	static struct D
+        static struct D
         {
           boost::mutex mutex;
           std::vector<uint64_t> cached_distribution;
@@ -2101,30 +2101,53 @@ bool core_rpc_server::on_get_output_distribution(const COMMAND_RPC_GET_OUTPUT_DI
         if (d.cached && amount == 0 && d.cached_from == req.from_height && d.cached_to == req.to_height)
         {
           res.distributions.push_back({amount, d.cached_start_height, d.cached_distribution, d.cached_base});
+          if (req.cumulative)
+          {
+            auto &distribution = res.distributions.back().distribution;
+            distribution[0] += d.cached_base;
+            for (size_t n = 1; n < distribution.size(); ++n)
+              distribution[n] += distribution[n-1];
+          }
           continue;
         }
 
+        // this is a slow operation, so we have precomputed caches of common cases
+        bool found = false;
+        for (const auto &slot: get_output_distribution_cache)
+        {
+          if (slot.amount == amount && slot.from_height == req.from_height && slot.to_height == req.to_height)
+          {
+            res.distributions.push_back({amount, slot.start_height, slot.distribution, slot.base});
+            found = true;
+            if (req.cumulative)
+            {
+              auto &distribution = res.distributions.back().distribution;
+              distribution[0] += slot.base;
+              for (size_t n = 1; n < distribution.size(); ++n)
+                distribution[n] += distribution[n-1];
+            }
+            break;
+          }
+        }
+        if (found)
+          continue;
+
         std::vector<uint64_t> distribution;
         uint64_t start_height, base;
-        if (!m_core.get_output_distribution(amount, req.from_height, start_height, distribution, base))
+        if (!m_core.get_output_distribution(amount, req.from_height, req.to_height, start_height, distribution, base))
         {
           error_resp.code = CORE_RPC_ERROR_CODE_INTERNAL_ERROR;
           error_resp.message = "Failed to get rct distribution";
           return false;
         }
-	if (req.to_height > 0 && req.to_height >= req.from_height)
+        if (req.to_height > 0 && req.to_height >= req.from_height)
         {
           uint64_t offset = std::max(req.from_height, start_height);
           if (offset <= req.to_height && req.to_height - offset + 1 < distribution.size())
             distribution.resize(req.to_height - offset + 1);
         }
-        if (req.cumulative)
-        {
-          distribution[0] += base;
-          for (size_t n = 1; n < distribution.size(); ++n)
-            distribution[n] += distribution[n-1];
-        }
-	if (amount == 0)
+
+        if (amount == 0)
         {
           d.cached_from = req.from_height;
           d.cached_to = req.to_height;
@@ -2132,6 +2155,13 @@ bool core_rpc_server::on_get_output_distribution(const COMMAND_RPC_GET_OUTPUT_DI
           d.cached_start_height = start_height;
           d.cached_base = base;
           d.cached = true;
+        }
+
+        if (req.cumulative)
+        {
+          distribution[0] += base;
+          for (size_t n = 1; n < distribution.size(); ++n)
+            distribution[n] += distribution[n-1];
         }
 
         res.distributions.push_back({amount, start_height, std::move(distribution), base});
