@@ -66,7 +66,7 @@
 #define COIN                                            ((uint64_t)100) // pow(10, 2)
 
 #define FEE_PER_KB_OLD                                  ((uint64_t)10) // pow(10, 2)
-#define FEE_PER_KB                                      ((uint64_t)5000) // 50 * pow(10, 2)
+#define FEE_PER_KB                                      ((uint64_t)2500) // 25 * pow(10, 2)
 #define DYNAMIC_FEE_PER_KB_BASE_FEE                     ((uint64_t)2500) // 25 * pow(10,2)
 #define DYNAMIC_FEE_PER_KB_BASE_BLOCK_REWARD            ((uint64_t)2500) // 25 * pow(10,2)
 #define DYNAMIC_FEE_PER_KB_BASE_FEE_V5                  ((uint64_t)2500 * (uint64_t)CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2 / CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V5)
