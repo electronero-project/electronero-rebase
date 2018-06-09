@@ -151,12 +151,10 @@ static const struct {
   // version 9 starts from block 308110, which is on or around the 31st of May, 2018. Fork time finalised on 2018-05-31.
   { 9, 308110, 0, 1527780225 },
 	
-  // version 10 starts from block 310757, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
-  { 10, 310790, 0, 1528100874 },
-  // version 10 starts from block 310800, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
-  { 11, 310860, 0, 1528100953 },
-  // version 10 starts from block 310800, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
-  //{ 12, 310900, 0, 1528343452 },
+  // version 10 starts from block 310435, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
+  { 10, 310435, 0, 1528094695 },
+  // version 11 starts from block 310486, which is on or around the 4th of June, 2018. Fork time finalised on 2018-06-04.
+  { 11, 310505, 0, 1528094768 },
 };
 
 //------------------------------------------------------------------
