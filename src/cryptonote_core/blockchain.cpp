@@ -422,6 +422,7 @@ bool Blockchain::init(BlockchainDB* db, const network_type nettype, bool offline
   {
     // ensure we fixup anything we found and fix in the future
     // m_db->fixup();
+    m_db->set_batch_transactions(true);
   }
 
   m_db->block_txn_start(true);
@@ -820,7 +821,7 @@ difficulty_type Blockchain::get_difficulty_for_next_block()
 
   if (version < 2) {
     difficulty_blocks_count = DIFFICULTY_BLOCKS_COUNT;
-  } else if (version < 12) {
+  } else if (version > 2 && version < 12) {
     difficulty_blocks_count = DIFFICULTY_BLOCKS_COUNT_V2;
   }else{
     difficulty_blocks_count = DIFFICULTY_BLOCKS_COUNT_V12;
@@ -873,7 +874,7 @@ difficulty_type Blockchain::get_difficulty_for_next_block()
     return next_difficulty(timestamps, difficulties, target);
   } else if (version > 2 && version < 9) {
     return next_difficulty_v2(timestamps, difficulties, target);
-  } else if (version < 12) {
+  } else if (version > 9 && version < 12) {
     return next_difficulty_v3(timestamps, difficulties, target);
   }else{
     return next_difficulty_v12(timestamps, difficulties, target);
@@ -3610,7 +3611,48 @@ leave:
   // coins will eventually exceed MONEY_SUPPLY and overflow a uint64. To prevent overflow, cap already_generated_coins
   // at MONEY_SUPPLY. already_generated_coins is only used to compute the block subsidy and MONEY_SUPPLY yields a
   // subsidy of 0 under the base formula and therefore the minimum subsidy >0 in the tail state.
-  already_generated_coins = base_reward < (MONEY_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY;
+ 
+  uint8_t hf_version = get_current_hard_fork_version();
+  // TESTNET, STAGENET and MAINNET
+  if (m_nettype == TESTNET)
+  {
+  // MONEY_SUPPLY_ETN == MONEY_SUPPLY_V1, v6 fork enables MONEY_SUPPLY == FORK_MONEY_SUPPLY
+  // uint64_t TOKEN_SUPPLY = version < 2 ? MONEY_SUPPLY_ETN : MONEY_SUPPLY;
+  uint64_t TOKEN_SUPPLY = hf_version < 6 ? MONEY_SUPPLY_ETN : version >= 10 ? TOKENS : MONEY_SUPPLY;
+  if (hf_version < 6) 
+  {
+   already_generated_coins = base_reward < (MONEY_SUPPLY_ETN-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY_ETN ;
+  } else 
+  {
+   already_generated_coins = base_reward < (MONEY_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY ;
+  }
+  }
+  else if (m_nettype == STAGENET)
+  {
+  // MONEY_SUPPLY_ETN == MONEY_SUPPLY_V1, v2 fork enables MONEY_SUPPLY == FORK_MONEY_SUPPLY
+  // uint64_t TOKEN_SUPPLY = version < 2 ? MONEY_SUPPLY_ETN : MONEY_SUPPLY;
+  uint64_t TOKEN_SUPPLY = hf_version < 7 ? MONEY_SUPPLY_ETN : version >= 10 ? TOKENS : MONEY_SUPPLY;
+  if (hf_version < 6) 
+  {
+   already_generated_coins = base_reward < (MONEY_SUPPLY_ETN-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY_ETN ;
+  } else 
+  {
+   already_generated_coins = base_reward < (TOKEN_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : TOKEN_SUPPLY ;
+  }
+  }
+  else
+  {
+  // MONEY_SUPPLY_ETN == MONEY_SUPPLY_V1, v6 fork enables MONEY_SUPPLY == FORK_MONEY_SUPPLY
+  // uint64_t TOKEN_SUPPLY = version < 6 ? MONEY_SUPPLY_ETN : MONEY_SUPPLY;
+  uint64_t TOKEN_SUPPLY = hf_version < 7 ? MONEY_SUPPLY_ETN : version >= 10 ? TOKENS : MONEY_SUPPLY;
+  if (hf_version < 6) 
+  {
+   already_generated_coins = base_reward < (MONEY_SUPPLY_ETN-already_generated_coins) ? already_generated_coins + base_reward : MONEY_SUPPLY_ETN ;
+  } else 
+  {
+   already_generated_coins = base_reward < (TOKEN_SUPPLY-already_generated_coins) ? already_generated_coins + base_reward : TOKEN_SUPPLY ;
+  }
+  }
   if(m_db->height())
     cumulative_difficulty += m_db->get_block_cumulative_difficulty(m_db->height() - 1);
 
